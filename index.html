@@ -40,22 +40,6 @@
             padding: 0;
             margin: 0;
         }
-        #checklist {
-            position: absolute;
-            top: 60px;
-            left: 10px;
-            z-index: 1000;
-            background-color: #f8f8f8;
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            font-family: Arial, sans-serif;
-        }
-        #checklist label {
-            display: block;
-            margin: 5px 0;
-            color: #444444;
-        }
         #map-title {
             position: absolute;
             top: 10px;
@@ -76,6 +60,22 @@
         #map-title p {
             font-size: 14px;
             margin: 5px 0 0;
+            color: #444444;
+        }
+        #checklist {
+            position: absolute;
+            top: 80px; /* Adjusted from 60px to 80px to avoid overlapping title */
+            left: 10px;
+            z-index: 1000;
+            background-color: #f8f8f8;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            font-family: Arial, sans-serif;
+        }
+        #checklist label {
+            display: block;
+            margin: 5px 0;
             color: #444444;
         }
         </style>
