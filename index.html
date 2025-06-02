@@ -42,7 +42,7 @@
         }
         #checklist {
             position: absolute;
-            top: 10px;
+            top: 60px;
             left: 10px;
             z-index: 1000;
             background-color: #f8f8f8;
@@ -56,10 +56,37 @@
             margin: 5px 0;
             color: #444444;
         }
+        #map-title {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 1000;
+            background-color: #f8f8f8;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #map-title h1 {
+            font-size: 18px;
+            margin: 0;
+            color: #444444;
+        }
+        #map-title p {
+            font-size: 14px;
+            margin: 5px 0 0;
+            color: #444444;
+        }
         </style>
-        <title>Bản đồ ngập lụt lũ lịch sử, tỉnh Quảng Trị</title>
+        <title>Bản đồ ngập lụt lũ lịch sử khu vực tỉnh Hà Tĩnh</title>
     </head>
     <body>
+        <div id="map-title">
+            <h1>Bản đồ ngập lụt lũ lịch sử khu vực tỉnh Quảng Trị</h1>
+            <p>Hoang Duc Vinh - VinhHRC@gmail.com</p>
+            <p>Zalo 0906 682 672</p>
+        </div>
         <div id="checklist">
             <label><input type="checkbox" id="layer-QT18102020" checked> Ngập lụt ngày 18/10/2020</label>
             <label><input type="checkbox" id="layer-QT28102024" checked> Ngập lụt ngày 28/10/2024</label>
@@ -82,26 +109,38 @@
         <script src="./resources/Autolinker.min.js"></script>
         <script src="./resources/qgis2web.js"></script>
         <script>
-            // Get layer variables from layers.js
-            var layersList = [layer_QT18102020_1, layer_QT28102024_2];
-            
-            // Function to toggle layer visibility
-            function toggleLayer(layer, checkboxId) {
-                var checkbox = document.getElementById(checkboxId);
-                layer.setVisible(checkbox.checked);
-            }
+            // Ensure map and layers are accessible after qgis2web initialization
+            document.addEventListener('DOMContentLoaded', function() {
+                // Access layers from layers.js (assuming qgis2web defines these variables)
+                var layer1 = window.layer_QT18102020_1;
+                var layer2 = window.layer_QT28102024_2;
 
-            // Add event listeners for checkboxes
-            document.getElementById('layer-QT18102020').addEventListener('change', function() {
-                toggleLayer(layer_QT18102020_1, 'layer-QT18102020');
-            });
-            document.getElementById('layer-QT28102024').addEventListener('change', function() {
-                toggleLayer(layer_QT28102024_2, 'layer-QT28102024');
-            });
+                // Function to toggle layer visibility
+                function toggleLayer(layer, checkboxId) {
+                    var checkbox = document.getElementById(checkboxId);
+                    if (layer && typeof layer.setVisible === 'function') {
+                        layer.setVisible(checkbox.checked);
+                    } else {
+                        console.error('Layer not found or setVisible not available for: ' + checkboxId);
+                    }
+                }
 
-            // Initial visibility (checked by default)
-            layer_QT18102020_1.setVisible(true);
-            layer_QT28102024_2.setVisible(true);
+                // Add event listeners for checkboxes
+                document.getElementById('layer-QT18102020').addEventListener('change', function() {
+                    toggleLayer(layer1, 'layer-QT18102020');
+                });
+                document.getElementById('layer-QT28102024').addEventListener('change', function() {
+                    toggleLayer(layer2, 'layer-QT28102024');
+                });
+
+                // Initial visibility (checked by default)
+                if (layer1 && typeof layer1.setVisible === 'function') {
+                    layer1.setVisible(true);
+                }
+                if (layer2 && typeof layer2.setVisible === 'function') {
+                    layer2.setVisible(true);
+                }
+            });
         </script>
     </body>
 </html>
