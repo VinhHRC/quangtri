@@ -83,9 +83,8 @@
     </head>
     <body>
         <div id="map-title">
-            <h1>Bản đồ ngập lụt lũ lịch sử khu vực tỉnh Quảng Trị</h1>
+            <h1>Bản đồ ngập lụt lũ lịch sử khu vực tỉnh Hà Tĩnh</h1>
             <p>Hoang Duc Vinh - VinhHRC@gmail.com</p>
-            <p>Zalo 0906 682 672</p>
         </div>
         <div id="checklist">
             <label><input type="checkbox" id="layer-QT18102020" checked> Ngập lụt ngày 18/10/2020</label>
@@ -109,37 +108,54 @@
         <script src="./resources/Autolinker.min.js"></script>
         <script src="./resources/qgis2web.js"></script>
         <script>
-            // Ensure map and layers are accessible after qgis2web initialization
+            // Wait for the map and layers to be fully initialized
             document.addEventListener('DOMContentLoaded', function() {
-                // Access layers from layers.js (assuming qgis2web defines these variables)
-                var layer1 = window.layer_QT18102020_1;
-                var layer2 = window.layer_QT28102024_2;
-
                 // Function to toggle layer visibility
                 function toggleLayer(layer, checkboxId) {
                     var checkbox = document.getElementById(checkboxId);
                     if (layer && typeof layer.setVisible === 'function') {
                         layer.setVisible(checkbox.checked);
+                        console.log(checkboxId + ' visibility set to: ' + checkbox.checked);
                     } else {
-                        console.error('Layer not found or setVisible not available for: ' + checkboxId);
+                        console.error('Error: Layer not found or setVisible not available for ' + checkboxId);
                     }
                 }
 
-                // Add event listeners for checkboxes
-                document.getElementById('layer-QT18102020').addEventListener('change', function() {
-                    toggleLayer(layer1, 'layer-QT18102020');
-                });
-                document.getElementById('layer-QT28102024').addEventListener('change', function() {
-                    toggleLayer(layer2, 'layer-QT28102024');
-                });
+                // Wait for qgis2web to initialize the map
+                var checkLayers = setInterval(function() {
+                    if (window.layer_QT18102020_1 && window.layer_QT28102024_2) {
+                        console.log('Layers detected:', window.layer_QT18102020_1, window.layer_QT28102024_2);
+                        
+                        // Access layers
+                        var layer1 = window.layer_QT18102020_1;
+                        var layer2 = window.layer_QT28102024_2;
 
-                // Initial visibility (checked by default)
-                if (layer1 && typeof layer1.setVisible === 'function') {
-                    layer1.setVisible(true);
-                }
-                if (layer2 && typeof layer2.setVisible === 'function') {
-                    layer2.setVisible(true);
-                }
+                        // Initial visibility (checked by default)
+                        if (layer1 && typeof layer1.setVisible === 'function') {
+                            layer1.setVisible(true);
+                        } else {
+                            console.error('Initial setup failed for layer_QT18102020_1');
+                        }
+                        if (layer2 && typeof layer2.setVisible === 'function') {
+                            layer2.setVisible(true);
+                        } else {
+                            console.error('Initial setup failed for layer_QT28102024_2');
+                        }
+
+                        // Add event listeners for checkboxes
+                        document.getElementById('layer-QT18102020').addEventListener('change', function() {
+                            toggleLayer(layer1, 'layer-QT18102020');
+                        });
+                        document.getElementById('layer-QT28102024').addEventListener('change', function() {
+                            toggleLayer(layer2, 'layer-QT28102024');
+                        });
+
+                        // Stop checking once layers are found
+                        clearInterval(checkLayers);
+                    } else {
+                        console.log('Waiting for layers to load...');
+                    }
+                }, 100); // Check every 100ms
             });
         </script>
     </body>
